@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let error = error {
-            // ...
+            self.showAlertMessage(messageHeader: "Sign in error", messageBody: error.localizedDescription)
             return
         }
         
@@ -61,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                                                        accessToken: authentication.accessToken)
         Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
             if let error = error {
-                // ...
+                self.showAlertMessage(messageHeader: "Authentication error", messageBody: error.localizedDescription)
                 return
             }
             // User is signed in
@@ -99,5 +99,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
+    func showAlertMessage(messageHeader header: String, messageBody body: String) {
+        
+        let alertController = UIAlertController(title: header, message: body, preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.window!.rootViewController!.present(alertController, animated: true, completion: nil)
+    }
     
 }
