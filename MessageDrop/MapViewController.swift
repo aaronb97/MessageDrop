@@ -14,11 +14,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     var mapView: GMSMapView!
     var window: UIWindow!
+    var dropMessageButton: UIButton!
     
     let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        locationManager.requestWhenInUseAuthorization()
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.view.backgroundColor = UIColor.white
@@ -33,13 +36,40 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         self.view.addSubview(self.mapView!)
         
-        let camera = GMSCameraPosition.camera(withLatitude: 37.36, longitude: -122.0, zoom: 6.0)
-        mapView.camera = camera
-        
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        
             locationManager.startUpdatingLocation()
+        }
+        
+        let camera = GMSCameraPosition.camera(withLatitude: 37, longitude: 95.7, zoom: 3.0)
+        mapView.camera = camera
+        
+        dropMessageButton = UIButton()
+        dropMessageButton.frame.size = CGSize(width: 180, height: 35)
+        dropMessageButton.center.x = self.view.center.x
+        dropMessageButton.center.y = 50
+        
+        dropMessageButton.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        dropMessageButton.layer.cornerRadius = 10
+        dropMessageButton.layer.borderWidth = 1
+        dropMessageButton.layer.borderColor = UIColor.black.cgColor
+        dropMessageButton.setTitle("Drop a Message!", for: .normal)
+        dropMessageButton.setTitleColor(UIColor.black, for: .normal)
+        dropMessageButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        
+        self.view.addSubview(dropMessageButton)
+        
+    }
+    
+    @objc func buttonAction(sender: UIButton!) {
+        if (sender == dropMessageButton)
+        {
+            dropMessageButton.isHidden = true
+            let location = locationManager.location
+            let camera = GMSCameraPosition.camera(withLatitude: (location?.coordinate.latitude)!, longitude: (location?.coordinate.longitude)!, zoom: 13.0)
+            self.mapView?.animate(to: camera)
         }
     }
     
