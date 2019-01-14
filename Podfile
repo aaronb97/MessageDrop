@@ -9,6 +9,7 @@ target 'MessageDrop' do
   pod 'Firebase/Auth'
   pod 'GoogleSignIn'
   pod 'GoogleMaps'
+  pod 'Firebase/Database'
 
   # Pods for MessageDrop
 
