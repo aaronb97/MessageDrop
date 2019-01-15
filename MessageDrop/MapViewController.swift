@@ -22,35 +22,48 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var cancelButton: UIButton!
     var messageTextView: UITextView!
     var marker: GMSMarker!
+    var messageToAdd : Message!
     //var messageDict : [String: Any]
     
     let locationManager = CLLocationManager()
     let TYPEFACE = "AppleSDGothicNeo-SemiBold"
     let MAX_LENGTH = 180 //max length for messages
+    let ref = Database.database().reference()
+    let email = Auth.auth().currentUser?.email?.replacingOccurrences(of: ".", with: ",")
+    
+    class Message {
+        var lat: Double
+        var lon: Double
+        var text: String
+        var time: Int
+        
+        init(lat: Double, lon: Double, text: String, time : Int) {
+            self.lat = lat
+            self.lon = lon
+            self.text = text
+            self.time = time
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //messageDict = [String: Any]()
-        
-        //Database.database().reference().child("users").child("test").child("messages").observeSingleEvent(of: .value, with: {
-        Database.database().reference().child("users").observeSingleEvent(of: .value, with: {
+        ref.child("users").observeSingleEvent(of: .value, with: {
 
             snapshot in
             if let snapshots = snapshot.children.allObjects as? [DataSnapshot] {
                 let users = snapshots.compactMap{$0.value as? [String : AnyObject]}
                 for user in users
                 {
-                    print(user)
-                    let messages = user["messages"] as? NSArray
-                    
-                    for message in messages!
+                    if let messages = user["messages"] as? NSArray
                     {
-                        let data = message as! [String: AnyObject]
-                        let location = CLLocationCoordinate2D(latitude: data["lat"] as! Double, longitude: data["lon"] as! Double)
-                        let marker = GMSMarker(position: location)
-                        marker.snippet = "\"\(String(describing: data["text"] as! String))\" \n\n Dropped by \(String(describing: user["nickname"] as! String))"
-                        marker.map = self.mapView
+                        for message in messages
+                        {
+                            let data = message as! [String: AnyObject]
+                            let location = CLLocationCoordinate2D(latitude: data["lat"] as! Double, longitude: data["lon"] as! Double)
+                            let marker = GMSMarker(position: location)
+                            marker.snippet = "\"\(String(describing: data["text"] as! String))\" \n\n Dropped by \(String(describing: user["nickname"] as! String))"
+                            marker.map = self.mapView
+                        }
                     }
                 }
             }
@@ -158,11 +171,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             marker = GMSMarker(position: (location?.coordinate)!)
             marker.map = mapView
             marker.tracksInfoWindowChanges = true
-            mapView.selectedMarker = marker
-            
-            
+
             mapView.isUserInteractionEnabled = false
-            
+            messageTextView.isHidden = false
             cancelButton.isHidden = false
             dropButton.isHidden = false
             messageTextView.becomeFirstResponder()
@@ -181,6 +192,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         else if (sender == dropButton)
         {
+            locationManager.stopUpdatingLocation()
+            
             dropMessageButton.isHidden = false
             mapView.isUserInteractionEnabled = true
             
@@ -188,6 +201,39 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             messageTextView.isHidden = true
             dropButton.isHidden = true
             messageTextView.resignFirstResponder()
+            
+            marker.snippet = messageTextView.text
+            
+            ref.child("users").child(email!).child("messages").observeSingleEvent(of: .value, with: {
+                
+                snapshot in
+                
+                let lat = self.locationManager.location?.coordinate.latitude
+                let lon = self.locationManager.location?.coordinate.longitude
+                let text = self.messageTextView.text
+                let time = NSDate().timeIntervalSince1970
+                
+                if (snapshot.exists())
+                {
+                    let count = snapshot.children.allObjects.count
+                    self.ref.child("users").child(self.email!).child("messages").child(String(count)).setValue(
+                        ["lat": lat!,
+                         "lon": lon!,
+                         "text": text!,
+                         "time": time])
+                }
+                else
+                {
+                    self.ref.child("users").child(self.email!).child("messages").child("0").setValue(
+                        ["lat": lat!,
+                         "lon": lon!,
+                         "text": text!,
+                         "time": time])
+                }
+                
+                
+            })
+            
         }
     }
     
@@ -195,14 +241,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         
         if text.rangeOfCharacter(from: CharacterSet.newlines) == nil && textView.text.count < MAX_LENGTH || text.count == 0 {
-            if (text.count == 0)
-            {
-                marker.snippet = String(textView.text.prefix(textView.text.count - 1))
-            }
-            else
-            {
-                marker.snippet = textView.text + text
-            }
+//            if (text.count == 0)
+//            {
+//                marker.snippet = String(textView.text.prefix(textView.text.count - 1))
+//            }
+//            else
+//            {
+//                marker.snippet = textView.text + text
+//            }
             return true
         }
         else {

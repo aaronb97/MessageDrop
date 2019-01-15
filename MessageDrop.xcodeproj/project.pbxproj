@@ -13,6 +13,7 @@
 		4E0F2CB121E67C0D00E76AB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E0F2CB021E67C0D00E76AB7 /* Assets.xcassets */; };
 		4E0F2CB421E67C0D00E76AB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E0F2CB221E67C0D00E76AB7 /* LaunchScreen.storyboard */; };
 		4E0F2CBC21E6A9CA00E76AB7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E0F2CBB21E6A9CA00E76AB7 /* GoogleService-Info.plist */; };
+		4E9DAE2F21ED702100794647 /* NicknameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9DAE2E21ED702100794647 /* NicknameViewController.swift */; };
 		4ED0BE1A21E6BF3C002F488A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED0BE1921E6BF3C002F488A /* MapViewController.swift */; };
 		4ED0BE2221E6DABE002F488A /* env.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4ED0BE2121E6DABE002F488A /* env.plist */; };
 		874F5BF766440E68E0798ABE /* Pods_MessageDrop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FD50893087DE4BDDC4C10F4 /* Pods_MessageDrop.framework */; };
@@ -29,6 +30,7 @@
 		4E0F2CB321E67C0D00E76AB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4E0F2CB521E67C0D00E76AB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E0F2CBB21E6A9CA00E76AB7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4E9DAE2E21ED702100794647 /* NicknameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameViewController.swift; sourceTree = "<group>"; };
 		4ED0BE1921E6BF3C002F488A /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		4ED0BE2121E6DABE002F488A /* env.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = env.plist; sourceTree = "<group>"; };
 		4FD50893087DE4BDDC4C10F4 /* Pods_MessageDrop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessageDrop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,12 +80,13 @@
 			children = (
 				4E0F2CA921E67C0B00E76AB7 /* AppDelegate.swift */,
 				4E0F2CAB21E67C0B00E76AB7 /* SignInViewController.swift */,
+				4ED0BE1921E6BF3C002F488A /* MapViewController.swift */,
+				4E9DAE2E21ED702100794647 /* NicknameViewController.swift */,
 				4E0F2CAD21E67C0B00E76AB7 /* Main.storyboard */,
 				4E0F2CB021E67C0D00E76AB7 /* Assets.xcassets */,
 				4E0F2CB221E67C0D00E76AB7 /* LaunchScreen.storyboard */,
 				4E0F2CB521E67C0D00E76AB7 /* Info.plist */,
 				4E0F2CBB21E6A9CA00E76AB7 /* GoogleService-Info.plist */,
-				4ED0BE1921E6BF3C002F488A /* MapViewController.swift */,
 				4ED0BE2121E6DABE002F488A /* env.plist */,
 			);
 			path = MessageDrop;
@@ -252,6 +255,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E9DAE2F21ED702100794647 /* NicknameViewController.swift in Sources */,
 				4E0F2CAC21E67C0B00E76AB7 /* SignInViewController.swift in Sources */,
 				4ED0BE1A21E6BF3C002F488A /* MapViewController.swift in Sources */,
 				4E0F2CAA21E67C0B00E76AB7 /* AppDelegate.swift in Sources */,

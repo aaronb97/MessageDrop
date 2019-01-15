@@ -68,10 +68,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 return
             }
             // User is signed in
-            // ...
+            let email = Auth.auth().currentUser?.email?.replacingOccurrences(of: ".", with: ",")
+            Database.database().reference().child("users").child(email!).observeSingleEvent(of: .value, with: {
+                
+                snapshot in
+                
+                if (snapshot.exists())
+                {
+                    let mapViewController = MapViewController()
+                    self.window?.rootViewController?.present(mapViewController, animated: true, completion: nil)
+                }
+                else
+                {
+                    let nicknameViewController = NicknameViewController()
+                    self.window?.rootViewController?.present(nicknameViewController, animated: true, completion: nil)
+                }
+                
+                
+            })
             
-            let mapViewController = MapViewController()
-            self.window?.rootViewController?.present(mapViewController, animated: true, completion: nil)
+            
         }
     }
     
